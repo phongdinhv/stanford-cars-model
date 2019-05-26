@@ -1,1 +1,1 @@
-grab_challenge
+# stanford-cars-model
