@@ -12,7 +12,7 @@ class WriterTensorboardX():
             except ImportError:
                 message = "Warning: TensorboardX visualization is configured to use, but currently not installed on " \
                     "this machine. Please install the package by 'pip install tensorboardx' command or turn " \
-                    "off the option in the 'config.json' file."
+                    "off the option in the 'train_config.json' file."
                 logger.warning(message)
         self.step = 0
         self.mode = ''

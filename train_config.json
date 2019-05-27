@@ -1,9 +1,9 @@
 {
-    "name": "ResNet18-FixWH",
+    "name": "ResNet50",
     "n_gpu": 1,
 
     "arch": {
-        "type": "ResNet18",
+        "type": "ResNet50",
         "args": {
             "use_pretrained": true,
             "num_classes": 196
@@ -13,10 +13,10 @@
         "type": "CarsDataLoader",
         "args":{
             "data_dir": "data_processing/datasets/training/extracted/",
-            "train_metas": "data_processing/datasets/cars_metas/cars_train_annos.mat",
-            "resize_width": 512,
+            "metas": "data_processing/datasets/cars_metas/cars_train_annos.mat",
+            "resize_width": 256,
             "resize_height": 256,
-            "batch_size": 64,
+            "batch_size": 32,
             "shuffle": true,
             "validation_split": 0.2,
             "num_workers": 1,
@@ -27,7 +27,7 @@
         "type": "Adam",
         "args":{
             "lr": 0.001,
-            "weight_decay": 0,
+            "weight_decay": 0.0,
             "amsgrad": true
         }
     },
@@ -43,14 +43,14 @@
         }
     },
     "trainer": {
-        "epochs": 100,
+        "epochs": 200,
 
         "save_dir": "saved/",
         "save_period": 1,
         "verbosity": 2,
         
         "monitor": "min val_loss",
-        "early_stop": 10,
+        "early_stop": 30,
         
         "tensorboardX": true
     }

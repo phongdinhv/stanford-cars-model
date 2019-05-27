@@ -13,7 +13,7 @@ class CarsDataset(Dataset):
     """
         Cars Dataset
     """
-    def __init__(self, data_dir, train_metas, resize_width, resize_height, transform, limit):
+    def __init__(self, data_dir, metas, resize_width, resize_height, transform, limit):
 
         self.data_dir = data_dir
         self.data = []
@@ -22,9 +22,9 @@ class CarsDataset(Dataset):
         self.to_tensor = transforms.ToTensor()
         self.mode = 'train'
 
-        if not isinstance(train_metas, str):
+        if not isinstance(metas, str):
             raise Exception("Train metas must be string location !")
-        labels_meta = mat_io.loadmat(train_metas)
+        labels_meta = mat_io.loadmat(metas)
 
         for idx, img_ in enumerate(labels_meta['annotations'][0]):
             if limit:
@@ -35,10 +35,11 @@ class CarsDataset(Dataset):
             if len(image.shape) == 2: # this is gray image
                 image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
 
-            img_resized = cv2.resize(image, (resize_height, resize_width))
+            img_resized = cv2.resize(image, (resize_width, resize_height))
 
             self.data.append(img_resized)
-            self.target.append(img_[4][0][0])
+            if self.mode == 'train':
+                self.target.append(img_[4][0][0])
 
     def __getitem__(self, idx):
         if self.mode == 'train':
@@ -54,17 +55,20 @@ class CarsDataLoader(BaseDataLoader):
     """
     Cars data loading
     """
-    def __init__(self, data_dir, train_metas, batch_size, resize_width,
+    def __init__(self, data_dir, metas, batch_size, resize_width,
                  resize_height, shuffle=True, validation_split=0.0,
                  num_workers=1, limit=None):
         trsfm = transforms.Compose([
             transforms.ToPILImage(),
             transforms.RandomGrayscale(),
-            transforms.RandomVerticalFlip(0.2),
+            transforms.RandomHorizontalFlip(0.2),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.Normalize(mean=[0.0, 0.0, 0.0], std=[255, 255, 255]),
         ])
-        self.dataset = CarsDataset(data_dir, train_metas, resize_width, resize_height, trsfm, limit)
+        # trsfm = transforms.Compose([
+        #     transforms.ToTensor(),
+        # ])
+        self.dataset = CarsDataset(data_dir, metas, resize_width, resize_height, trsfm, limit)
 
         super(CarsDataLoader, self).__init__(self.dataset, batch_size, shuffle,
                                              validation_split, num_workers)

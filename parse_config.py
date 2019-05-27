@@ -19,9 +19,9 @@ class ConfigParser:
             os.environ["CUDA_VISIBLE_DEVICES"] = args.device
         if args.resume:
             self.resume = Path(args.resume)
-            self.cfg_fname = self.resume.parent / 'config.json'
+            self.cfg_fname = self.resume.parent / 'train_config.json'
         else:
-            msg_no_cfg = "Configuration file need to be specified. Add '-c config.json', for example."
+            msg_no_cfg = "Configuration file need to be specified. Add '-c train_config.json', for example."
             assert args.config is not None, msg_no_cfg
             self.resume = None
             self.cfg_fname = Path(args.config)
@@ -36,13 +36,13 @@ class ConfigParser:
 
         exper_name = self.config['name']
         self.__save_dir = save_dir / 'models' / exper_name / timestamp
-        self.__log_dir = save_dir / 'log' / exper_name / timestamp
+        self.__log_dir = save_dir / 'models' / exper_name / timestamp
 
         self.save_dir.mkdir(parents=True, exist_ok=True)
         self.log_dir.mkdir(parents=True, exist_ok=True)
 
         # save updated config file to the checkpoint dir
-        write_json(self.config, self.save_dir / 'config.json')
+        write_json(self.config, self.save_dir / 'train_config.json')
 
         # configure logging module
         setup_logging(self.log_dir)
