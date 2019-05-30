@@ -1,9 +1,9 @@
 {
-    "name": "ResNet50",
+    "name": "ResNet18",
     "n_gpu": 1,
 
     "arch": {
-        "type": "ResNet50",
+        "type": "ResNet18",
         "args": {
             "use_pretrained": true,
             "num_classes": 196
@@ -14,9 +14,9 @@
         "args":{
             "data_dir": "data_processing/datasets/training/extracted/",
             "metas": "data_processing/datasets/cars_metas/cars_train_annos.mat",
-            "resize_width": 256,
+            "resize_width": 512,
             "resize_height": 256,
-            "batch_size": 32,
+            "batch_size": 64,
             "shuffle": true,
             "validation_split": 0.2,
             "num_workers": 1,
@@ -24,11 +24,8 @@
         }
     },
     "optimizer": {
-        "type": "Adam",
+        "type": "AdaBound",
         "args":{
-            "lr": 0.001,
-            "weight_decay": 0.0,
-            "amsgrad": true
         }
     },
     "loss": "cross_entropy_loss",
@@ -38,7 +35,7 @@
     "lr_scheduler": {
         "type": "StepLR",
         "args": {
-            "step_size": 50,
+            "step_size": 15,
             "gamma": 0.1
         }
     },
