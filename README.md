@@ -1,25 +1,30 @@
-# stanford-cars-model
+# stanford-cars-model (under development)
 
-# Under Development
-
-##1. Dependency
+### Dependency
 - PyTorch
 - scikit-image
 - opencv-python
 
-##2. Extract training & testing data using annotation bounding box
+### Extract training & testing data using annotation bounding box
 
-First navigate the data_processing folder and create following folder structure
-data_processing --- datasets --- train --- original
-                            |         |--- extracted
-                            |
-                            |--- test --- original
-                                    |--- extracted
+#### Folder structure
+  ```
+  data_processing/
+  │
+  ├── datasets/ - folder contain training & testing data
+      ├── training/
+          ├── original/ - original cars from training data
+          ├── extracted/ - cars after extracted using bounding box label
+      ├── testing/
+          ├── original/ - original cars from testing data
+          ├── extracted/ - cars after extracted using bounding box label
+          
+  ```
+  Download training data from ..., copy every images in training and testing to
+#### Running Script
+python extract_cars.py
 
-cd data_processing
-mkdir datasets
-cd datasets
-mkdir train test
+
 
 ##3. Training
 
