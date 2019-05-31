@@ -13,12 +13,12 @@ class CarsDataset(Dataset):
     """
         Cars Dataset
     """
-    def __init__(self, data_dir, metas, resize_width, resize_height, transform, limit):
+    def __init__(self, data_dir, metas, resize_width, resize_height, limit):
 
         self.data_dir = data_dir
         self.data = []
         self.target = []
-        self.transform = transform
+
         self.to_tensor = transforms.ToTensor()
         self.mode = 'train'
 
@@ -41,6 +41,13 @@ class CarsDataset(Dataset):
             if self.mode == 'train':
                 self.target.append(img_[4][0][0])
 
+        self.transform = transforms.Compose([
+            transforms.ToPILImage(),
+            transforms.RandomHorizontalFlip(0.1),
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0, 0, 0], std=[255., 255., 255.])
+        ])
+
     def __getitem__(self, idx):
         if self.mode == 'train':
             return self.transform(self.data[idx]), torch.tensor(self.target[idx]-1, dtype=torch.long)
@@ -58,19 +65,8 @@ class CarsDataLoader(BaseDataLoader):
     def __init__(self, data_dir, metas, batch_size, resize_width,
                  resize_height, shuffle=True, validation_split=0.0,
                  num_workers=1, limit=None):
-        # trsfm = transforms.Compose([
-        #     transforms.ToPILImage(),
-        #     transforms.RandomGrayscale(),
-        #     transforms.RandomHorizontalFlip(0.1),
-        #     transforms.ToTensor(),
-        #     transforms.Normalize(mean=[0.0, 0.0, 0.0], std=[255, 255, 255]),
-        # ])
-        trsfm = transforms.Compose([
-            transforms.ToPILImage(),
-            transforms.RandomHorizontalFlip(0.1),
-            transforms.ToTensor(),
-        ])
-        self.dataset = CarsDataset(data_dir, metas, resize_width, resize_height, trsfm, limit)
+
+        self.dataset = CarsDataset(data_dir, metas, resize_width, resize_height, limit)
 
         super(CarsDataLoader, self).__init__(self.dataset, batch_size, shuffle,
                                              validation_split, num_workers)
