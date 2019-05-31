@@ -64,6 +64,9 @@ class Trainer(BaseTrainer):
             total_loss += loss.item()
             total_metrics += self._eval_metrics(output, target)
 
+            if self.lr_scheduler:
+                self.lr_scheduler.step()
+
             if batch_idx % self.log_step == 0:
                 self.logger.debug('Train Epoch: {} [{}/{} ({:.0f}%)] Loss: {:.6f}'.format(
                     epoch,
@@ -81,9 +84,6 @@ class Trainer(BaseTrainer):
         if self.do_validation:
             val_log = self._valid_epoch(epoch)
             log = {**log, **val_log}
-
-        if self.lr_scheduler is not None:
-            self.lr_scheduler.step()
 
         return log
 

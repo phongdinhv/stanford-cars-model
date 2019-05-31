@@ -18,14 +18,16 @@
             "resize_height": 256,
             "batch_size": 64,
             "shuffle": true,
-            "validation_split": 0.2,
+            "validation_split": 0.15,
             "num_workers": 1,
             "limit": null
         }
     },
     "optimizer": {
-        "type": "AdaBound",
+        "type": "SGD",
         "args":{
+            "lr": 0.1,
+            "momentum": 0.9
         }
     },
     "loss": "cross_entropy_loss",
@@ -33,20 +35,21 @@
         "accuracy", "top_k_accuracy"
     ],
     "lr_scheduler": {
-        "type": "StepLR",
+        "type": "CyclicLR",
         "args": {
-            "step_size": 15,
-            "gamma": 0.1
+            "base_lr": 0.0001,
+            "max_lr": 0.1,
+            "cycle_momentum": false
         }
     },
     "trainer": {
-        "epochs": 200,
+        "epochs": 300,
 
         "save_dir": "saved/",
         "save_period": 1,
         "verbosity": 2,
         
-        "monitor": "min val_loss",
+        "monitor": "min val_accuracy",
         "early_stop": 30,
         
         "tensorboardX": true

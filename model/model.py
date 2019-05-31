@@ -1,7 +1,23 @@
 import torch.nn as nn
 import torch.nn.functional as F
 from base import BaseModel
-from torchvision.models import resnet34, resnet18, resnet50, squeezenet, inception_v3
+from torchvision.models import resnet34, resnet18, resnet50, squeezenet, inception_v3, densenet121
+
+
+class DenseNet121(BaseModel):
+
+    def __init__(self, num_classes=196, use_pretrained=True):
+        super(BaseModel, self).__init__()
+        self.model = densenet121(pretrained=use_pretrained)
+
+        # replace last layer with total cars classes
+        n_inputs = self.model.classifier.in_features
+        classifier = nn.Linear(n_inputs, num_classes)
+        self.model.classifier = classifier
+
+    def forward(self, x):
+
+        return self.model(x)
 
 
 class ResNet50(BaseModel):
