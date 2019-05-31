@@ -1,8 +1,10 @@
 # stanford-cars-model (under development)
 
 ### Dependency
-- PyTorch
+- python 3.7
+- pytorch
 - scikit-image
+- numpy
 - opencv-python
 
 ### Extract training & testing data using annotation bounding box
@@ -26,6 +28,7 @@ python extract_cars.py
 
 
 
-##3. Training
-
-##4. Testing
+## Training
+TODO:
+## Testing
+TODO:
