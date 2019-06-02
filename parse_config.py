@@ -38,7 +38,7 @@ class ConfigParser:
 
         exper_name = self.config['name']
         self.__save_dir = save_dir / 'models' / exper_name / timestamp
-        self.__log_dir = save_dir / 'models' / exper_name / timestamp
+        self.__log_dir = save_dir / 'models' / exper_name / timestamp / 'logs'
 
         self.save_dir.mkdir(parents=True, exist_ok=True)
         self.log_dir.mkdir(parents=True, exist_ok=True)
