@@ -40,6 +40,7 @@ class CarsDataset(Dataset):
             self.target.append(img_[4][0][0])
 
         if self.mode == "train":
+            print("Load-up dataset with Auto Augment")
             self.train_transform = transforms.Compose([
                 ImageNetAutoAugment(),
                 transforms.ToTensor(),
