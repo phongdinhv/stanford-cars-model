@@ -57,7 +57,7 @@ class CarsDataset(Dataset):
         if len(image.shape) == 2:  # this is gray image
             image = cv2.cvtColor(image, cv2.COLOR_GRAY2RGB)
 
-        img_resized = cv2.resize(image, (self.resize_width, self.resize_height))
+        img_resized = cv2.resize(image, (self.resize_width, self.resize_height), interpolation=cv2.INTER_CUBIC)
         if self.mode == 'train':
             return self.train_transform(img_resized), torch.tensor(self.target[idx]-1, dtype=torch.long)
         elif self.mode == 'val' or self.mode == 'test':
