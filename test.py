@@ -69,7 +69,7 @@ def main(config, resume):
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='PyTorch Template')
+    parser = argparse.ArgumentParser(description='Cars Test')
 
     parser.add_argument('-r', '--resume', default=None, type=str,
                         help='path to latest checkpoint (default: None)')
