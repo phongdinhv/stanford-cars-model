@@ -59,8 +59,8 @@ class Trainer(BaseTrainer):
             loss.backward()
             self.optimizer.step()
 
-            # self.writer.set_step((epoch - 1) * len(self.data_loader) + batch_idx)
-            # self.writer.add_scalar('loss', loss.item())
+            self.writer.set_step((epoch - 1) * len(self.data_loader) + batch_idx)
+            self.writer.add_scalar('loss', loss.item())
             total_loss += loss.item()
             total_metrics += self._eval_metrics(output, target)
 
@@ -107,8 +107,8 @@ class Trainer(BaseTrainer):
                 output = self.model(data)
                 loss = self.loss(output, target)
 
-                # self.writer.set_step((epoch - 1) * len(self.valid_data_loader) + batch_idx, 'valid')
-                # self.writer.add_scalar('loss', loss.item())
+                self.writer.set_step((epoch - 1) * len(self.valid_data_loader) + batch_idx, 'valid')
+                self.writer.add_scalar('loss', loss.item())
                 total_val_loss += loss.item()
                 total_val_metrics += self._eval_metrics(output, target)
                 # self.writer.add_image('input', make_grid(data.cpu(), nrow=8, normalize=True))
