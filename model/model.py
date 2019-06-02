@@ -1,19 +1,19 @@
 import torch.nn as nn
-import torch.nn.functional as F
+from torchvision.models import resnet34, resnet18, resnet50, squeezenet, inception_v3, resnet101
+from .wide_resnet import ResNet as Wide_ResNet
 from base import BaseModel
-from torchvision.models import resnet34, resnet18, resnet50, squeezenet, inception_v3, densenet121
 
 
-class DenseNet121(BaseModel):
+class ResNet101(BaseModel):
 
     def __init__(self, num_classes=196, use_pretrained=True):
         super(BaseModel, self).__init__()
-        self.model = densenet121(pretrained=use_pretrained)
+        self.model = resnet101(pretrained=use_pretrained)
 
         # replace last layer with total cars classes
-        n_inputs = self.model.classifier.in_features
-        classifier = nn.Linear(n_inputs, num_classes)
-        self.model.classifier = classifier
+        n_inputs = self.model.fc.in_features
+        classifier = nn.Sequential(nn.Linear(n_inputs, num_classes))
+        self.model.fc = classifier
 
     def forward(self, x):
 
@@ -49,6 +49,16 @@ class ResNet34(BaseModel):
 
     def forward(self, x):
 
+        return self.model(x)
+
+
+class WideResNet18(BaseModel):
+
+    def __init__(self, num_classes=196, use_pretrained=True):
+        super(BaseModel, self).__init__()
+        self.model = Wide_ResNet(num_classes=num_classes, depth=18)
+
+    def forward(self, x):
         return self.model(x)
 
 
