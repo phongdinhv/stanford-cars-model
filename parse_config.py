@@ -17,34 +17,57 @@ class ConfigParser:
             args.add_argument(*opt.flags, default=None, type=opt.type)
         args = args.parse_args()
 
+        timestamp = datetime.now().strftime(r'%m%d_%H%M%S') if timestamp else ''
+
         if args.device:
             os.environ["CUDA_VISIBLE_DEVICES"] = args.device
-        if args.resume:
-            self.resume = Path(args.resume)
-            self.cfg_fname = self.resume.parent / 'train_config.json'
-        else:
-            msg_no_cfg = "Configuration file need to be specified. Add '-c train_config.json', for example."
+
+        if args.phase == 'train':
+            if args.resume:
+                self.resume = Path(args.resume)
+                self.cfg_fname = self.resume.parent / 'train_config.json'
+            else:
+                msg_no_cfg = "Configuration file need to be specified. Add '-c train_config.json', for example."
+                assert args.config is not None, msg_no_cfg
+                self.resume = None
+                self.cfg_fname = Path(args.config)
+
+            # load config file and apply custom cli options
+            config = read_json(self.cfg_fname)
+            self.__config = _update_config(config, options, args)
+            # set save_dir where trained model and log will be saved.
+            save_dir = Path(self.config['trainer']['save_dir'])
+
+            exper_name = self.config['name']
+            self.__save_dir = save_dir / 'training' / exper_name / timestamp
+            self.__log_dir = save_dir / 'training' / exper_name / timestamp / 'logs'
+
+            self.save_dir.mkdir(parents=True, exist_ok=True)
+            self.log_dir.mkdir(parents=True, exist_ok=True)
+
+            # save updated config file to the checkpoint dir
+            write_json(self.config, self.save_dir / 'train_config.json')
+
+        if args.phase == 'test':
+            msg_no_cfg = "Configuration file need to be specified. Add '-c test_config.json', for example."
             assert args.config is not None, msg_no_cfg
             self.resume = None
             self.cfg_fname = Path(args.config)
 
-        # load config file and apply custom cli options
-        config = read_json(self.cfg_fname)
-        self.__config = _update_config(config, options, args)
+            # load config file and apply custom cli options
+            config = read_json(self.cfg_fname)
+            self.__config = _update_config(config, options, args)
 
-        # set save_dir where trained model and log will be saved.
-        save_dir = Path(self.config['trainer']['save_dir'])
-        timestamp = datetime.now().strftime(r'%m%d_%H%M%S') if timestamp else ''
+            # log save dir
+            log_dir = Path(self.config['log_dir'])
 
-        exper_name = self.config['name']
-        self.__save_dir = save_dir / 'models' / exper_name / timestamp
-        self.__log_dir = save_dir / 'models' / exper_name / timestamp / 'logs'
+            exper_name = self.config['name']
+            self.__log_dir = log_dir / 'testing' / exper_name / timestamp
 
-        self.save_dir.mkdir(parents=True, exist_ok=True)
-        self.log_dir.mkdir(parents=True, exist_ok=True)
+            self.log_dir.mkdir(parents=True, exist_ok=True)
 
-        # save updated config file to the checkpoint dir
-        write_json(self.config, self.save_dir / 'train_config.json')
+            # save config to test dir
+            write_json(self.config, self.__log_dir / 'test_config.json')
 
         # configure logging module
         setup_logging(self.log_dir)

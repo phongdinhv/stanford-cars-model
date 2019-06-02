@@ -12,21 +12,13 @@ def main(config, resume):
     logger = config.get_logger('test')
 
     # setup data_processing instances
-    data_loader = getattr(module_data, config['data_processing']['type'])(
-        config['data_processing']['args']['data_dir'],
-        batch_size=512,
-        shuffle=False,
-        validation_split=0.0,
-        training=False,
-        num_workers=2
-    )
+    data_loader = config.initialize('data_processing', module_data)
 
     # build model architecture
     model = config.initialize('arch', module_arch)
     logger.info(model)
 
     # get function handles of loss and metrics
-    loss_fn = getattr(module_loss, config['loss'])
     metric_fns = [getattr(module_metric, met) for met in config['metrics']]
 
     logger.info('Loading checkpoint: {} ...'.format(resume))
@@ -49,14 +41,8 @@ def main(config, resume):
             data, target = data.to(device), target.to(device)
             output = model(data)
 
-            #
-            # save sample images, or do something with output here
-            #
-
             # computing loss, metrics on test set
-            loss = loss_fn(output, target)
             batch_size = data.shape[0]
-            total_loss += loss.item() * batch_size
             for i, metric in enumerate(metric_fns):
                 total_metrics[i] += metric(output, target) * batch_size
 
@@ -71,11 +57,15 @@ def main(config, resume):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Cars Test')
 
-    parser.add_argument('-r', '--resume', default=None, type=str,
-                        help='path to latest checkpoint (default: None)')
+    parser.add_argument('-p', '--phase', default='test', type=str,
+                        help='phase (default: None)')
+    parser.add_argument('-c', '--config', default=None, type=str,
+                      help='config file path (default: None)')
+    parser.add_argument('-m', '--model', default=None, type=str,
+                        help='path to model (default: None)')
     parser.add_argument('-d', '--device', default=None, type=str,
                         help='indices of GPUs to enable (default: all)')
-
     args = parser.parse_args()
-    config = ConfigParser(args)
-    main(config, args.resume)
+
+    config = ConfigParser(parser)
+    main(config, args.model)
