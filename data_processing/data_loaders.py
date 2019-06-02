@@ -4,6 +4,7 @@ from scipy import io as mat_io
 from skimage import io
 from torch.utils.data import Dataset
 from torchvision import transforms
+from .auto_augment import AutoAugment
 import numpy as np
 
 from base import BaseDataLoader
@@ -41,18 +42,21 @@ class CarsDataset(Dataset):
             if self.mode == 'train':
                 self.target.append(img_[4][0][0])
 
-        self.transform = transforms.Compose([
-            transforms.ToPILImage(),
-            transforms.RandomHorizontalFlip(0.1),
+        self.train_transform = transforms.Compose([
+            AutoAugment(),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0, 0, 0], std=[255., 255., 255.])
+            transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
+        ])
+        self.val_or_test_transform = transforms.Compose([
+            transforms.ToTensor(),
+            transforms.Normalize(mean=[0.5, 0.5, 0.5], std=[0.5, 0.5, 0.5])
         ])
 
     def __getitem__(self, idx):
         if self.mode == 'train':
-            return self.transform(self.data[idx]), torch.tensor(self.target[idx]-1, dtype=torch.long)
+            return self.train_transform(self.data[idx]), torch.tensor(self.target[idx]-1, dtype=torch.long)
         elif self.mode == 'val' or self.mode == 'test':
-            return self.to_tensor(self.data[idx]), torch.tensor(self.target[idx] - 1, dtype=torch.long)
+            return self.val_or_test_transform(self.data[idx]), torch.tensor(self.target[idx] - 1, dtype=torch.long)
 
     def __len__(self):
         return len(self.data)
