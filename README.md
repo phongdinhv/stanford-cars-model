@@ -26,9 +26,16 @@
 #### Running Script
 python extract_cars.py
 
-
-
 ## Training
-TODO:
+- ResNet 151 
+- Cyclic Learning Rate
+- Auto Augment
 ## Testing
-TODO:
+
+python test.py -c test_config.json -m0 "path_to_model" -o "output_location"
+Example:
+python test.py -c test_config.json -m "pretrained_model.pth" -o "test_output/"
+
+
+## Final result
+Test Accuracy: ~93% (Updating...)
