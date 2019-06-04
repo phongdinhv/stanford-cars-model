@@ -38,4 +38,4 @@ python test.py -c test_config.json -m "pretrained_model.pth" -o "test_output/"
 
 
 ## Final result
-Test Accuracy: ~93% (Updating...)
+Test Accuracy: 93.5% (Updating...)
