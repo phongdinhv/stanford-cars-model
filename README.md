@@ -70,6 +70,18 @@ python extract_cars.py --meta "datasets/cars_metas/cars_test_annos_withlabels.ma
 - ResNet 151 
 - Cyclic Learning Rate
 - Auto Augment
+
+Train
+
+```angular2html
+python train.py -c train_config.json
+```
+
+Resume
+
+```angular2html
+python train.py -c train_config.json -r "path/to/model.pth"
+```
 ## Testing
 ```angular2html
 python test.py -c test_config.json -m "pretrained_model.pth" -o "test_output/"
