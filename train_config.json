@@ -1,9 +1,9 @@
 {
-    "name": "ResNet18",
+    "name": "ResNet152-AutoAugment",
     "n_gpu": 1,
 
     "arch": {
-        "type": "ResNet18",
+        "type": "ResNet152",
         "args": {
             "use_pretrained": true,
             "num_classes": 196
@@ -12,11 +12,12 @@
     "data_processing": {
         "type": "CarsDataLoader",
         "args":{
+            "mode": "train",
             "data_dir": "data_processing/datasets/training/extracted/",
             "metas": "data_processing/datasets/cars_metas/cars_train_annos.mat",
-            "resize_width": 512,
-            "resize_height": 256,
-            "batch_size": 64,
+            "resize_width": 299,
+            "resize_height": 299,
+            "batch_size": 16,
             "shuffle": true,
             "validation_split": 0.15,
             "num_workers": 1,
@@ -27,7 +28,9 @@
         "type": "SGD",
         "args":{
             "lr": 0.1,
-            "momentum": 0.9
+            "momentum": 0.9,
+            "weight_decay": 0.005,
+            "nesterov": true
         }
     },
     "loss": "cross_entropy_loss",
@@ -37,9 +40,8 @@
     "lr_scheduler": {
         "type": "CyclicLR",
         "args": {
-            "base_lr": 0.0001,
-            "max_lr": 0.1,
-            "cycle_momentum": false
+            "base_lr": 1e-6,
+            "max_lr": 1e-5
         }
     },
     "trainer": {
@@ -49,8 +51,8 @@
         "save_period": 1,
         "verbosity": 2,
         
-        "monitor": "min val_accuracy",
-        "early_stop": 30,
+        "monitor": "max val_accuracy",
+        "early_stop": 40,
         
         "tensorboardX": true
     }
