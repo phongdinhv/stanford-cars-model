@@ -45,6 +45,7 @@
   ```
   
   Training data download: http://imagenet.stanford.edu/internal/car196/cars_train.tgz 
+  
   Testing data download: http://imagenet.stanford.edu/internal/car196/cars_test.tgz
   
   After download, extract and copy image to ```data_processing/datasets/training/original``` and ```data_processing/datasets/testing/original```
