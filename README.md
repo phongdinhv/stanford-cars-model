@@ -1,5 +1,7 @@
 # stanford-cars-model (under development)
 
+A PyTorch model for Stanford Cars Classification
+
 ### Dependencies
 - python 3.7
 - pytorch
