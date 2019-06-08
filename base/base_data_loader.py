@@ -30,7 +30,7 @@ class BaseDataLoader(DataLoader):
 
         idx_full = np.arange(self.n_samples)
 
-        np.random.seed(0)
+        np.random.seed(3)
         np.random.shuffle(idx_full)
 
         if isinstance(split, int):
