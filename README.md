@@ -8,13 +8,14 @@ A PyTorch model for Stanford Cars Classification
 - scikit-image
 - numpy
 - opencv-python
+- tensorboard
 
 ### Install
 - pytorch: see https://pytorch.org/get-started/locally/
 
 - scikit, opencv
     ```angular2html
-    pip install scikit-image numpy opencv-python
+    pip install scikit-image numpy opencv-python tensorboard
     ```
 
 ### Extract training & testing data using annotation bounding box
