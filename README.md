@@ -75,6 +75,7 @@ The model contain:
 - Cyclic Learning Rate: default from 0.01 to 0.1
 - Auto Augmentation with ImageNet pretrained
 
+
 You can start training model imediately with the following script:
 
 ```angular2html
@@ -92,6 +93,11 @@ python train.py -c train_config.json -r "path/to/model.pth"
 ![alt text](images/training.PNG)
 
 ## Testing
+
+You can download pretrained model here: https://www.dropbox.com/s/w550z44ur2pwr4j/model_best.pth?dl=0
+
+And run following script with downloaded model to predict classes on test set
+
 ```angular2html
 python test.py -c test_config.json -m "pretrained_model.pth" -o "test_output/"
 ```
