@@ -67,21 +67,29 @@ python extract_cars.py --meta "datasets/cars_metas/cars_test_annos_withlabels.ma
 ```
 
 ## Training
-- ResNet 151 
-- Cyclic Learning Rate
-- Auto Augment
 
-Train
+The model contain:
+
+- ResNet 151 
+- Cyclic Learning Rate: default from 0.01 to 0.1
+- Auto Augmentation with ImageNet pretrained
+
+You can start training model imediately with the following script:
 
 ```angular2html
 python train.py -c train_config.json
 ```
 
-Resume
+Resuming
 
 ```angular2html
 python train.py -c train_config.json -r "path/to/model.pth"
 ```
+
+## Visualization
+
+![alt text](images/training.PNG)
+
 ## Testing
 ```angular2html
 python test.py -c test_config.json -m "pretrained_model.pth" -o "test_output/"
@@ -89,4 +97,4 @@ python test.py -c test_config.json -m "pretrained_model.pth" -o "test_output/"
 
 
 ## Final result
-Test Accuracy: 93.4% (Updating...)
+Test Accuracy: 93.4%
