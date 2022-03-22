@@ -59,12 +59,12 @@ Standford Cars Dataset come with annotated label, so we would like to use it to 
 For training: 
 ```
 cd data_processing
-python extract_cars.py --meta "datasets/cars_metas/cars_train_annos.mat" -input "datasets/training/original/ -output "datasets/training/extracted/"
+python extract_cars.py --meta "datasets/cars_metas/cars_train_annos.mat" --input "datasets/training/original/" --output "datasets/training/extracted/"
 ```
 For testing:
 ```
 cd data_processing
-python extract_cars.py --meta "datasets/cars_metas/cars_test_annos_withlabels.mat" -input "datasets/testing/original/ -output "datasets/testing/extracted/"
+python extract_cars.py --meta "datasets/cars_metas/cars_test_annos_withlabels.mat" --input "datasets/testing/original/" --output "datasets/testing/extracted/"
 ```
 
 ## Training
